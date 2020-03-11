@@ -34,12 +34,14 @@ class App extends Component {
         name={person.name}
         age={person.age}
         key={person.id}
+        deleted={() => { this.deletePersonHandler(person) }}
+        changed={(event) => { this.changeNameFromInputHandler(person, event.target.value) }}
       />
     })
     return personsList
   }
 
-  changeNamesHandler = () => {
+  switchNameHandler = () => {
 
     // Do not mutate the state directly!! use setState() 
     //
@@ -71,6 +73,46 @@ class App extends Component {
     })
   }
 
+  deletePersonHandler = (person) => {
+    const newPerson = [...this.state.persons]
+    const index = newPerson.indexOf(person)
+    newPerson.splice(index, 1)
+
+    this.setState({
+      persons: newPerson
+    })
+  }
+
+  changeNameFromInputHandler = (person, newName) => {
+    const newPersons = [...this.state.persons]  //copy data
+
+    const index = newPersons.indexOf(person)
+    newPersons[index].name = newName //make changes
+
+    this.setState({
+      persons: newPersons //update the state
+    })
+
+  }
+
+  disableSwitchButton = () => {
+
+    // return 0 => false
+    // return >0 => true
+    // ! => not
+
+    return !this.state.persons.length
+
+    // Or I can use the following 
+    // 
+    // if (this.state.persons.length === 0){
+    //   return true
+    // } else {
+    //   return false
+    // }
+
+  }
+
   render() {
 
     let personsList = []
@@ -83,9 +125,29 @@ class App extends Component {
         <h1>
           Hello React World !!
         </h1>
-        <button onClick={this.changeNamesHandler}> change names</button>
-        <button onClick={this.togglePersonsHandler}> toggle Persons</button>
-        {personsList}
+
+        <button
+          onClick={this.switchNameHandler}
+          disabled={this.disableSwitchButton()}>
+          Switch Name
+        </button>
+
+        <button onClick={this.togglePersonsHandler}> Toggle Persons</button>
+        <button onClick={this.deletePersonHandler}> Delete Person</button>
+
+        <div style={{ display: 'flex' }}>
+
+          <div style={{ width: '50%' }}>
+            <h2> List A </h2>
+            {personsList}
+          </div>
+
+          <div style={{ width: '50%' }} >
+            <h2> List B </h2>
+          </div>
+
+        </div>
+
       </div>
     )
   }
