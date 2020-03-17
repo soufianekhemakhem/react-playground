@@ -8,18 +8,21 @@ class App extends Component {
       {
         id: 'aze',
         name: 'Wael',
-        age: '24'
+        age: '24',
+        list: "A"
       },
       {
         id: 'afd',
         name: 'Wassim',
-        age: '22'
+        age: '22',
+        list: "A"
       }
     ],
-    showPersons: true
+    showPersons: true,
+    title: 'black'
   }
 
-  generatePersonsList = () => {
+  generatePersonsList = (list) => {
     // let personsList = []
 
     // for (let i = 0; i < this.persons.length; i++) {
@@ -29,13 +32,18 @@ class App extends Component {
 
     // }
 
-    let personsList = this.state.persons.map((person) => {
+    let array = this.state.persons.filter((person) => {
+      return person.list == list
+    })
+
+    let personsList = array.map((person) => {
       return <Person
         name={person.name}
         age={person.age}
         key={person.id}
-        deleted={() => { this.deletePersonHandler(person) }}
+        deleted={() => { this.deletePersonHandler(person.id) }}
         changed={(event) => { this.changeNameFromInputHandler(person, event.target.value) }}
+        moved={() => { this.movePersonHandler(person) }}
       />
     })
     return personsList
@@ -69,13 +77,16 @@ class App extends Component {
     // }
 
     this.setState({
-      showPersons: !this.state.showPersons
+      showPersons: !this.state.showPersons,
+      title: this.state.showPersons ? 'red' : 'black'
     })
   }
 
-  deletePersonHandler = (person) => {
+  deletePersonHandler = (personId) => {
     const newPerson = [...this.state.persons]
-    const index = newPerson.indexOf(person)
+    const index = newPerson.findIndex((person) => {
+      return person.id == personId
+    })
     newPerson.splice(index, 1)
 
     this.setState({
@@ -113,18 +124,40 @@ class App extends Component {
 
   }
 
+  movePersonHandler = (person) => {
+    const newPersons = [...this.state.persons]
+    const index = newPersons.indexOf(person)
+
+    // if (newPersons[index].list == 'A') {
+    //   newPersons[index].list = 'B'
+    // } else {
+    //   newPersons[index].list = 'A'
+    // }
+
+    newPersons[index].list = newPersons[index].list == 'A' ? 'B' : 'A'
+
+    this.setState({
+      persons: newPersons
+    })
+  }
+
+
+
   //Hello world!!!
 
   render() {
 
-    let personsList = []
+    let personsListA = []
+    let personsListB = []
 
-    if (this.state.showPersons)
-      personsList = this.generatePersonsList()
+    if (this.state.showPersons) {
+      personsListA = this.generatePersonsList('A')
+      personsListB = this.generatePersonsList('B')
+    }
 
     return (
       <div className="App">
-        <h1>
+        <h1 style={{ color: this.state.title }}>
           Hello React World !!
         </h1>
 
@@ -141,11 +174,13 @@ class App extends Component {
 
           <div style={{ width: '50%' }}>
             <h2> List A </h2>
-            {personsList}
+            {personsListA}
           </div>
 
           <div style={{ width: '50%' }} >
             <h2> List B </h2>
+            {personsListB}
+
           </div>
 
         </div>

@@ -11,7 +11,7 @@ const Person = (props) => {
 
 
         <div className="Person">
-            <p>I am {props.name} and I am {props.age} years old</p>
+            <p onClick={props.moved}>I am {props.name} and I am {props.age} years old</p>
             <input onChange={props.changed} />
             <button onClick={props.deleted}> X </button>
 
