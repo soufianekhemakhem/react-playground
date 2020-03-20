@@ -4,7 +4,7 @@ import Person from './Person/Person'
 
 class App extends Component {
   state = {
-    persons: [
+    personsA: [
       {
         id: 'aze',
         name: 'Wael',
@@ -16,7 +16,9 @@ class App extends Component {
         age: '22'
       }
     ],
-    showPersons: true
+    showPersons: true,
+    personsB: []
+
   }
 
   generatePersonsList = () => {
@@ -29,7 +31,7 @@ class App extends Component {
 
     // }
 
-    let personsList = this.state.persons.map((person) => {
+    let personsList = this.state.personsA.map((person) => {
       return <Person
         name={person.name}
         age={person.age}
@@ -48,11 +50,11 @@ class App extends Component {
     // console.log('The button was clicked !!');
     // this.state.persons[0].name = "Jalel"
 
-    const newPersons = [...this.state.persons]  //copy data
+    const newPersons = [...this.state.personsA]  //copy data
     newPersons[0].name = 'Jalel' //make changes
 
     this.setState({
-      persons: newPersons //update the state
+      personsA: newPersons //update the state
     })
 
   }
@@ -74,23 +76,23 @@ class App extends Component {
   }
 
   deletePersonHandler = (person) => {
-    const newPerson = [...this.state.persons]
+    const newPerson = [...this.state.personsA]
     const index = newPerson.indexOf(person)
     newPerson.splice(index, 1)
 
     this.setState({
-      persons: newPerson
+      personsA: newPerson
     })
   }
 
   changeNameFromInputHandler = (person, newName) => {
-    const newPersons = [...this.state.persons]  //copy data
+    const newPersons = [...this.state.personsA]  //copy data
 
     const index = newPersons.indexOf(person)
     newPersons[index].name = newName //make changes
 
     this.setState({
-      persons: newPersons //update the state
+      personsA: newPersons //update the state
     })
 
   }
@@ -101,7 +103,7 @@ class App extends Component {
     // return >0 => true
     // ! => not
 
-    return !this.state.persons.length
+    return !this.state.personsA.length
 
     // Or I can use the following 
     // 
@@ -115,10 +117,10 @@ class App extends Component {
 
   render() {
 
-    let personsList = []
+    let personsListA = []
 
     if (this.state.showPersons)
-      personsList = this.generatePersonsList()
+      personsListA = this.generatePersonsList()
 
     return (
       <div className="App">
@@ -139,7 +141,7 @@ class App extends Component {
 
           <div style={{ width: '50%' }}>
             <h2> List A </h2>
-            {personsList}
+            {personsListA}
           </div>
 
           <div style={{ width: '50%' }} >
