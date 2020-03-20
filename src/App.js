@@ -17,11 +17,16 @@ class App extends Component {
       }
     ],
     showPersons: true,
-    personsB: []
+    personsB: [
+      {
+        id: 'afh',
+        name: 'Sofien',
+        age: '31'
+      }]
 
   }
 
-  generatePersonsList = () => {
+  generatePersonsList = (array) => {
     // let personsList = []
 
     // for (let i = 0; i < this.persons.length; i++) {
@@ -31,13 +36,15 @@ class App extends Component {
 
     // }
 
-    let personsList = this.state.personsA.map((person) => {
+
+    let personsList = array.map((person) => {
       return <Person
         name={person.name}
         age={person.age}
         key={person.id}
         deleted={() => { this.deletePersonHandler(person) }}
         changed={(event) => { this.changeNameFromInputHandler(person, event.target.value) }}
+        moved={() => { this.movePersonHandler(person) }}
       />
     })
     return personsList
@@ -115,12 +122,36 @@ class App extends Component {
 
   }
 
+  movePersonHandler = (person) => {
+    let newPersonsA = [...this.state.personsA]
+    let newPersonsB = [...this.state.personsB]
+
+    let index = newPersonsA.indexOf(person)
+
+    if (index >= 0) {
+      newPersonsB.push(newPersonsA[index])
+      newPersonsA.splice(index, 1)
+    } else {
+      index = newPersonsB.indexOf(person)
+      newPersonsA.push(newPersonsB[index])
+      newPersonsB.splice(index, 1)
+    }
+
+    this.setState({
+      personsA: newPersonsA,
+      personsB: newPersonsB
+    })
+  }
+
   render() {
 
     let personsListA = []
+    let personsListB = []
 
-    if (this.state.showPersons)
-      personsListA = this.generatePersonsList()
+    if (this.state.showPersons) {
+      personsListA = this.generatePersonsList(this.state.personsA)
+      personsListB = this.generatePersonsList(this.state.personsB)
+    }
 
     return (
       <div className="App">
@@ -146,6 +177,7 @@ class App extends Component {
 
           <div style={{ width: '50%' }} >
             <h2> List B </h2>
+            {personsListB}
           </div>
 
         </div>
